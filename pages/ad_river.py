@@ -1,3 +1,4 @@
+import allure
 from selene import have, be, by
 from selene.support.shared import browser
 
@@ -11,7 +12,6 @@ class AdRiver:
         self.news_link = browser.element(by.text('Новости'))
         self.contacts_link = browser.element(by.text('Контакты'))
         self.privacy_policy_link = browser.element(by.text('Политика конфиденциальности'))
-        self.cookie_banner = browser.element('.cookie-banner, #cookie-notice')
         self.search_results = browser.all('.search-block-elenent')
         self.login_form = browser.element('.entrance-form-block')
 
