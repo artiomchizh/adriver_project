@@ -16,7 +16,7 @@ class AdRiver:
         self.login_form = browser.element('.entrance-form-block')
 
     def open(self):
-        browser.open('/')
+        browser.open('https://www.adriver.ru/')
 
     def click_login_button(self):
         self.header_login_button.should(be.clickable).click()
