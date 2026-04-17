@@ -1,16 +1,10 @@
-# import pytest
-# from selene.support.shared import browser
-#
-#
-# @pytest.fixture(scope="function", autouse=True)
-# def open_browser():
-#     browser.config.base_url = 'https://www.adriver.ru/'
-#     yield
-# browser.quit()
 import pytest
 from selene import browser
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
+from utils import attach
+
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_browser():
@@ -33,3 +27,10 @@ def setup_browser():
     browser.config.driver = driver
 
     yield driver
+
+    attach.add_screenshot(driver)
+    attach.add_page_source(driver)
+    attach.add_console_logs(driver)
+    attach.add_video(driver)
+
+    driver.quit()
