@@ -43,11 +43,9 @@ from selenium.webdriver.chrome.options import Options
 
 from utils import attach
 
-# Загружаем переменные из .env
 load_dotenv()
 
 def get_driver():
-    """Фабрика драйверов: выбирает между локальным Chrome и Selenoid"""
     selenoid_url = os.getenv('SELENOID_URL')
     selenoid_enabled = os.getenv('SELENOID_ENABLED', 'false').lower() == 'true'
 
@@ -57,7 +55,6 @@ def get_driver():
         return create_local_chrome_driver()
 
 def create_selenoid_driver(selenoid_url):
-    """Создаёт драйвер для Selenoid"""
     options = Options()
     selenoid_capabilities = {
         "browserName": "chrome",
@@ -78,12 +75,9 @@ def create_selenoid_driver(selenoid_url):
     return driver
 
 def create_local_chrome_driver():
-    """Создаёт локальный Chrome драйвер"""
     options = Options()
     options.add_argument("--window-size=1920,1080")
-    # Опционально: headless режим
-    # if os.getenv('LOCAL_CHROME_HEADLESS', 'false').lower() == 'true':
-    #     options.add_argument("--headless")
+
 
     driver = webdriver.Chrome(options=options)
     return driver
@@ -95,7 +89,6 @@ def setup_browser():
 
     yield driver
 
-    # Аттачи только если драйвер ещё жив
     try:
         attach.add_screenshot(driver)
         attach.add_page_source(driver)
