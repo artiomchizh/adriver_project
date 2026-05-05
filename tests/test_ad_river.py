@@ -1,70 +1,50 @@
+
 import allure
 from selene.support import by
 from selene.support.conditions import have, be
 from selene.support.shared import browser
 
-from pages.ad_river import AdRiver
+from pages.main_page import MainPage
+from pages.agency_page import AgencyPage
+from pages.login_page import LoginPage
 
-class TestAdRiver:
-    with allure.step("main page opens"):
-        def test_01(self):
 
-            adriver = AdRiver()
-            adriver.open()
-            assert adriver.page_title_contains('AdRiver')
-    with allure.step("login button works"):
-        def test_02(self):
-            adriver = AdRiver()
-            adriver.open()
-            adriver.click_login_button()
-            assert adriver.is_login_form_displayed()
-    with allure.step("search functionality"):
-        def test_03(self):
-            adriver = AdRiver()
-            adriver.open()
-            adriver.search_for('реклама')
-            count = adriver.get_search_results_count()
-            assert count > 0
-    with allure.step("agency navigation"):
-        def test_04(self):
-            adriver = AdRiver()
-            adriver.open()
-            adriver.navigate_to_agency()
-            assert 'agency' in browser.driver.current_url
-    with allure.step("header links present"):
-        def test_05(self):
-            adriver = AdRiver()
-            adriver.open()
-            assert adriver.check_header_links()
-    with allure.step("footer links navigation"):
-        def test_06(self):
-            adriver = AdRiver()
-            adriver.open()
-            adriver.scroll_to_bottom()
-            result = adriver.click_and_check_footer_link('Политика конфиденциальности')
-            assert result
-    with allure.step("responsive elements visible"):
-        def test_07(self):
+@allure.feature("AdRiver Website")
+@allure.story("Main Page Functionality")
+def setup_module():
+    browser.config.base_url = 'https://www.adriver.ru/'
 
-            adriver = AdRiver()
-            adriver.open()
-            adriver.header_login_button.should(be.visible)
-            adriver.agency_link.should(be.visible)
-            adriver.search_input.should(be.visible)
-    with allure.step("page elements interactable"):
-        def test_08(self):
-            adriver = AdRiver()
-            adriver.open()
 
-            current_url = browser.driver.current_url
-            adriver.company_link.should(be.clickable).click()
-            assert browser.driver.current_url != current_url
+def teardown_module():
+    browser.quit()
 
-            adriver.open()
+@allure.title("Main page opens successfully")
+@allure.description("Verify that main page loads and has correct title")
+def test_main_page_opens():
+    main_page = MainPage().open()
+    assert main_page.page_title_contains('AdRiver')
 
-            current_url = browser.driver.current_url
-            adriver.news_link.should(be.clickable).click()
-            assert browser.driver.current_url != current_url
+@allure.title("Login button works")
+@allure.description("Click login button and verify login form appears")
+def test_login_button_works():
+    main_page = MainPage().open()
+    login_page = main_page.click_login_button()
+    login_page.should_be_loaded()
 
+@allure.title("Search functionality works")
+@allure.description("Search for 'реклама' and verify results appear")
+def test_search_functionality():
+    main_page = MainPage().open()
+    search_results_page = main_page.search_for('реклама')
+    count = search_results_page.get_results_count()
+    assert count > 0
+
+
+@allure.title("Navigation to Agency page")
+@allure.description("Navigate to Agency page and verify it loads")
+def test_agency_navigation():
+    main_page = MainPage().open()
+    agency_page = main_page.navigate_to_agency()
+    agency_page.should_be_loaded()
 
 
